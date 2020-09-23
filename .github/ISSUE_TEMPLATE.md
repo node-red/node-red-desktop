@@ -1,7 +1,7 @@
 <!--
 ## Before you hit that Submit button....
 
-This issue tracker is for problems with the Node-RED runtime, the editor or the core nodes.
+This issue tracker is for problems with the Node-RED Desktop.
 
 If your issue is:
   - a general 'how-to' type question,
@@ -27,9 +27,6 @@ To help us understand the issue, please fill-in as much of the following informa
 
 ### Please tell us about your environment:
 
-- [ ] Node-RED version:
-- [ ] Node.js version:
+- [ ] Node-RED Desktop version:
 - [ ] npm version:
 - [ ] Platform/OS:
-- [ ] Browser:
-- [ ] running in Docker:

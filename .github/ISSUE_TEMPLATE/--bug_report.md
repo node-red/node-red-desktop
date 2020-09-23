@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Reproducible software issues in the core of Node-RED
+about: Reproducible software issues in the Node-RED Desktop
 title: ''
 labels: ''
 assignees: ''
@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 <!--
-This issue tracker is for problems with the Node-RED runtime, the editor or the core nodes.
+This issue tracker is for problems with the Node-RED Desktop.
 
 If your issue is:
   - a general 'how-to' type question,
@@ -32,8 +32,6 @@ To help us understand the issue, please fill-in as much of the following informa
 
 ### Please tell us about your environment:
 
-- [ ] Node-RED version:
-- [ ] Node.js version:
+- [ ] Node-RED Desktop version:
 - [ ] npm version:
 - [ ] Platform/OS:
-- [ ] Browser:
