@@ -18,10 +18,11 @@ var http = require('http');
 var expressApp = require('express')();
 var server = http.createServer(expressApp);
 var RED = require('node-red');
-var { app, BrowserWindow, shell, Menu } = require('electron');
+var { app, Menu, BrowserWindow, dialog, shell } = require('electron');
 
 var settings = {
     uiPort: process.env.PORT || 1880,
+    uiHost: '0.0.0.0',
     httpAdminRoot: '/red',
     httpNodeRoot: '/',
     editorTheme: { projects: { enabled: true } }
@@ -73,8 +74,16 @@ if (!app.requestSingleInstanceLock()) {
     RED.init(server, settings);
     expressApp.use(settings.httpAdminRoot, RED.httpAdmin);
     expressApp.use(settings.httpNodeRoot, RED.httpNode);
-    server.listen(settings.uiPort);
-    RED.start().then(function () {
-        app.whenReady().then(createWindow);
+    server.on('error', function (error) {
+        dialog.showErrorBox('Error', error.toString());
+        app.exit(1);
+    });
+    server.listen(settings.uiPort, settings.uiHost, function () {
+        RED.start().then(function () {
+            app.whenReady().then(createWindow);
+        }).otherwise(function (error) {
+            dialog.showErrorBox('Error', error.toString());
+            app.exit(1);
+        });
     });
 }
