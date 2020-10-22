@@ -14,6 +14,8 @@
  * limitations under the License.
  **/
 
+var os = require('os');
+var path = require('path');
 var http = require('http');
 var expressApp = require('express')();
 var server = http.createServer(expressApp);
@@ -25,6 +27,7 @@ var settings = {
     uiHost: '0.0.0.0',
     httpAdminRoot: '/red',
     httpNodeRoot: '/',
+    userDir: path.join(os.homedir(), '.node-red'),
     editorTheme: { projects: { enabled: true } }
 };
 
