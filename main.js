@@ -20,58 +20,23 @@ var http = require('http');
 var expressApp = require('express')();
 var server = http.createServer(expressApp);
 var RED = require('node-red');
-var { app, Menu, BrowserWindow, dialog, shell } = require('electron');
+var { app, Menu, dialog, shell, Tray } = require('electron');
+var tray = null;
 
 var settings = {
+    uiHost: '127.0.0.1',
     uiPort: process.env.PORT || 1880,
-    uiHost: '0.0.0.0',
     httpAdminRoot: '/red',
     httpNodeRoot: '/',
     userDir: path.join(os.homedir(), '.node-red'),
     editorTheme: { projects: { enabled: true } }
 };
 
-var win;
-var createWindow = function () {
-    Menu.setApplicationMenu(new Menu());
-    win = new BrowserWindow({ titleBarStyle: 'hidden', frame: (process.platform !== 'darwin')});
-    win.maximize();
-    var template = [{
-        label: 'Node-RED',
-        submenu: [{ label: 'About', role: 'about' }, { label: 'Quit', role: 'quit' }]
-    }, {
-        label: 'View',
-        submenu: [{ role: 'reload', accelerator: 'F5' }, { type: 'separator' },
-                  { role: 'resetzoom' }, { role: 'zoomin' }, { role: 'zoomout' }]
-    }, {
-        label: 'Window',
-        submenu: [{
-            label: 'Toggle Maximize', accelerator: 'F9',
-            click: function () {
-                if (win.isMaximized()) { win.setSize(800, 600); } else { win.maximize(); }
-            }
-        },
-        { role: 'togglefullscreen', accelerator: 'F11' },
-        { type: 'separator' }, { role: 'toggledevtools', accelerator: 'F12' }]
-    }];
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-    win.setMenuBarVisibility(false);
-    win.webContents.on('new-window', function (event, url) {
-        event.preventDefault();
-        shell.openExternal(url);
-    });
-    win.webContents.on('did-finish-load', function () {
-        win.webContents.insertCSS('#red-ui-header { -webkit-app-region: drag; }');
-        win.webContents.insertCSS('#red-ui-header > ul { -webkit-app-region: no-drag; }');
-    });
-    win.loadURL('http://localhost:' + settings.uiPort + settings.httpAdminRoot);
-    app.on('second-instance', function () {
-        if (win.isMinimized()) { win.restore(); }
-        win.focus();
-    });
-};
-
+if (process.platform === 'darwin') {
+    app.dock.hide();
+}
 if (!app.requestSingleInstanceLock()) {
+    shell.openExternal('http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot);
     app.quit();
 } else {
     RED.init(server, settings);
@@ -83,8 +48,21 @@ if (!app.requestSingleInstanceLock()) {
     });
     server.listen(settings.uiPort, settings.uiHost, function () {
         RED.start().then(function () {
-            app.whenReady().then(createWindow);
-        }).otherwise(function (error) {
+            app.whenReady().then(function () {
+                tray = new Tray(path.join(__dirname, 'build', 'icon.png'));
+                tray.setToolTip('Node-RED');
+                tray.on('click', function () {
+                    shell.openExternal('http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot);
+                });
+                tray.setContextMenu(Menu.buildFromTemplate([
+                    { label: 'Node-RED', click: function () {
+                        shell.openExternal('http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot);
+                    }},
+                    { label: 'Quit', role: 'quit' }
+                ]));
+                shell.openExternal('http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot);
+            });
+        }).catch(function (error) {
             dialog.showErrorBox('Error', error.toString());
             app.exit(1);
         });
