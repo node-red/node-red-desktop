@@ -28,15 +28,17 @@ var settings = {
     uiPort: process.env.PORT || 1880,
     httpAdminRoot: '/red',
     httpNodeRoot: '/',
-    userDir: path.join(os.homedir(), '.node-red'),
+    userDir: path.join(os.homedir(), '.node-red-standalone'),
     editorTheme: { projects: { enabled: true } }
 };
+var url = 'http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot;
 
 if (process.platform === 'darwin') {
+    process.env.PATH += ':/usr/local/bin';
     app.dock.hide();
 }
 if (!app.requestSingleInstanceLock()) {
-    shell.openExternal('http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot);
+    shell.openExternal(url);
     app.quit();
 } else {
     RED.init(server, settings);
@@ -49,18 +51,25 @@ if (!app.requestSingleInstanceLock()) {
     server.listen(settings.uiPort, settings.uiHost, function () {
         RED.start().then(function () {
             app.whenReady().then(function () {
-                tray = new Tray(path.join(__dirname, 'build', 'icon.png'));
+                var icon = (process.platform === 'darwin') ? 'iconTemplate.png' : 'icon.png';
+                tray = new Tray(path.join(__dirname, 'build' ,icon));
                 tray.setToolTip('Node-RED');
                 tray.on('click', function () {
-                    shell.openExternal('http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot);
+                    shell.openExternal(url);
                 });
                 tray.setContextMenu(Menu.buildFromTemplate([
-                    { label: 'Node-RED', click: function () {
-                        shell.openExternal('http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot);
-                    }},
-                    { label: 'Quit', role: 'quit' }
+                    {
+                        label: 'Node-RED', click: function () {
+                            shell.openExternal(url);
+                        }
+                    },
+                    {
+                        label: 'Quit', click: function () {
+                            app.exit(1);
+                        }
+                    }
                 ]));
-                shell.openExternal('http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot);
+                shell.openExternal(url);
             });
         }).catch(function (error) {
             dialog.showErrorBox('Error', error.toString());
