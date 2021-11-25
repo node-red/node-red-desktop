@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Reproducible software issues in the Node-RED Desktop
+about: Reproducible software issues in the Node-RED installer
 title: ''
 labels: ''
 assignees: ''
@@ -32,6 +32,6 @@ To help us understand the issue, please fill-in as much of the following informa
 
 ### Please tell us about your environment:
 
-- [ ] Node-RED Desktop version:
+- [ ] Node-RED installer version:
 - [ ] npm version:
 - [ ] Platform/OS:
