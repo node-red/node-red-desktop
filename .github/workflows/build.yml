@@ -1,0 +1,15 @@
+on:
+  push:
+    branches: [ master ]
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ windows-latest, macos-latest, ubuntu-latest ]
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v2
+    - run: npm install
+    - run: npm run build
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}

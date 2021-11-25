@@ -1,5 +1,5 @@
-# node-red-desktop
-The Node-RED desktop is a desktop application which includes Node-RED, Node.js, nodes, and Chromium browser engine.
+# Node-RED installer
+The Node-RED installer is a standalone installer which includes Node-RED, Node.js, nodes, and Chromium browser engine.
 
 *This project is under development. Therefore, it is not ready for general use currently.*
 <!--
@@ -22,8 +22,3 @@ The Node-RED desktop is a desktop application which includes Node-RED, Node.js, 
 
 (3) On the Finder in the Application directory, you need to right-click the Node-RED icon and select "Open" in the menu to start.
 -->
-## Notes
-There's another project which has the same name as follows.
-@sakazuki kindly accepted us to use the name in the official project because of the common name.
-
-https://github.com/sakazuki/node-red-desktop
