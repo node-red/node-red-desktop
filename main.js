@@ -15,7 +15,9 @@
  **/
 
 var os = require('os');
+var fs = require('fs');
 var path = require('path');
+var child_process = require('child_process');
 var http = require('http');
 var expressApp = require('express')();
 var server = http.createServer(expressApp);
@@ -41,6 +43,25 @@ if (!app.requestSingleInstanceLock()) {
     shell.openExternal(url);
     app.quit();
 } else {
+    RED.hooks.add("postInstall", function (event, done) {
+        var cmd = (process.platform === 'win32') ? 'npm.cmd' : 'npm';
+        var args = ['install', 'electron-rebuild'];
+        child_process.execFile(cmd, args, { cwd: settings.userDir }, function (error) {
+            if (!error) {
+                var cmd2 = path.join('node_modules', '.bin',
+                    (process.platform === 'win32') ? 'electron-rebuild.cmd' : 'electron-rebuild');
+                var args2 = ['-v', process.versions.electron];
+                child_process.execFile(cmd2, args2, { cwd: event.dir }, function (error2) {
+                    if (!error2) {
+                        done();
+                    } else {
+                        dialog.showErrorBox('Error', error2.toString());
+                        app.exit(1);
+                    }
+                });
+            }
+        });
+    });
     RED.init(server, settings);
     expressApp.use(settings.httpAdminRoot, RED.httpAdmin);
     expressApp.use(settings.httpNodeRoot, RED.httpNode);
