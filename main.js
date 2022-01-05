@@ -23,6 +23,8 @@ var expressApp = require('express')();
 var server = http.createServer(expressApp);
 var RED = require('node-red');
 var { app, Menu, dialog, shell, Tray } = require('electron');
+var log = require('electron-log');
+Object.assign(console, log.functions);
 var tray = null;
 
 var settings = {
