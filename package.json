@@ -54,10 +54,11 @@
     "build": "electron-builder"
   },
   "dependencies": {
+    "electron-log": "4.4.4",
     "node-red": "2.1.4"
   },
   "devDependencies": {
-    "electron": "16.0.4",
+    "electron": "16.0.6",
     "electron-builder": "22.14.2"
   },
   "description": "Node-RED installer",
