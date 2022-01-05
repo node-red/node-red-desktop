@@ -5,6 +5,7 @@
   "build": {
     "appId": "com.electron.node-red",
     "productName": "Node-RED",
+    "asar": false,
     "files": [
       "**/*",
       {
