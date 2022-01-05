@@ -35,6 +35,7 @@ var settings = {
 };
 var url = 'http://' + settings.uiHost + ':' + settings.uiPort + settings.httpAdminRoot;
 
+process.execPath = 'node';
 if (process.platform === 'darwin') {
     process.env.PATH += ':/usr/local/bin';
     app.dock.hide();
