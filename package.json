@@ -1,6 +1,6 @@
 {
   "name": "node-red-installer",
-  "version": "2.1.4",
+  "version": "2.2.0",
   "main": "main.js",
   "build": {
     "appId": "com.electron.node-red",
@@ -54,11 +54,11 @@
     "build": "electron-builder"
   },
   "dependencies": {
-    "electron-log": "4.4.4",
-    "node-red": "2.1.4"
+    "electron-log": "4.4.6",
+    "node-red": "2.2.0"
   },
   "devDependencies": {
-    "electron": "16.0.6",
+    "electron": "17.0.0",
     "electron-builder": "22.14.2"
   },
   "description": "Node-RED installer",
